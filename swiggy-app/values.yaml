@@ -1,0 +1,11 @@
+replicaCount: 2
+
+image:
+  repository: abdulfayis/gkeapplication
+  tag: latest
+  pullPolicy: Always
+
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 3000
