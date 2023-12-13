@@ -64,7 +64,7 @@ pipeline {
         stage("Docker Clean up "){
             steps{
                  sh 'echo " cleaning Docker Images"'
-                 sh "sudo docker rmi -f $(sudo docker images -q)"
+                 sh 'sudo docker rmi -f \$(sudo docker images -q)'
             }
         }
         stage("Helm install "){
