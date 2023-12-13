@@ -61,6 +61,11 @@ pipeline {
                 }
             }
         }
+        stage("Docker Clean up "){
+            steps{
+                 // sh "sudo docker rmi -f $(sudo docker images -q)"
+            }
+        }
         stage("Helm install "){
             steps{
                  sh "curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3"
