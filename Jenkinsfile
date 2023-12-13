@@ -17,6 +17,15 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/abdulfayis681/gke-application.git'
             }
         }
+        stage("Docker Build"){
+            steps{
+                script{
+                    withDockerRegistry(credentialsId: '9181b467-36db-4aea-bc62-816143482973', toolName: 'docker'){   
+                        sh "sudo docker build -t ${IMAGE} ."
+                    }
+                }
+            }
+        }
         stage(' Trivy Scan') {
             steps {
                 //  trivy output template 
@@ -24,7 +33,7 @@ pipeline {
 
                 // Scan all vuln levels
                 sh 'sudo mkdir -p reports'
-                sh 'sudo trivy image --format template --template @./html.tpl -o reports/trivy-report.html abdulfayis/gkeapplication:latest'
+                sh 'sudo trivy image --format template --template @./html.tpl -o reports/trivy-report.html ${IMAGE}:latest'
                 publishHTML target : [
                     allowMissing: true,
                     alwaysLinkToLastBuild: true,
@@ -40,31 +49,16 @@ pipeline {
 
             }
         }
-        stage("Docker Build & Push"){
+        stage("Docker Push"){
             steps{
                 script{
                     withDockerRegistry(credentialsId: '9181b467-36db-4aea-bc62-816143482973', toolName: 'docker'){   
-                        sh "sudo docker build -t ${IMAGE} ."
                         sh "sudo docker tag ${IMAGE} abdulfayis/${IMAGE}:${TAG} "
                         sh "sudo docker push abdulfayis/${IMAGE}:${TAG} "
                         sh "sudo docker tag ${IMAGE} abdulfayis/${IMAGE}:latest "
                         sh "sudo docker push abdulfayis/${IMAGE}:latest "
                     }
                 }
-            }
-        }
-        stage("TRIVY"){
-            steps{
-                 sh "trivy image abdulfayis/gkeapplication:latest > trivyimage.txt" 
-            }
-        }
-        stage('Trivy Scan') {
-            steps {
-                script {
-                    sh """trivy image --format template --template \"html.tpl\" --output trivy_report.html abdulfayis/${IMAGE}:${TAG} """
-                    
-                }
-                
             }
         }
         stage("Helm install "){
