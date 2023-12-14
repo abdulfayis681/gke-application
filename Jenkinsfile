@@ -45,7 +45,7 @@ pipeline {
                 ]
 
                 // Scan again and fail on CRITICAL vulns
-                // sh 'trivy image --ignore-unfixed --vuln-type os,library --exit-code 1 --severity CRITICAL abdulfayis/gkeapplication:latest '
+                // sh 'trivy image --ignore-unfixed --vuln-type os,library --exit-code 1 --severity CRITICAL ${IMAGE}:latest '
 
             }
         }
