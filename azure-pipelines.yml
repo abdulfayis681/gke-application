@@ -1,9 +1,5 @@
 # Docker
-- task: AWSCLI@1
-  inputs:
-    awsCredentials: 'aws-user'
-    regionName: 'us-east-1'
-    awsCommand: 'aws s3 ls'
+
 
 # Build and push an image to Azure Container Registry
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
@@ -43,6 +39,11 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
+    - task: AWSCLI@1
+      inputs:
+        awsCredentials: 'aws-user'
+        regionName: 'us-east-1'
+        awsCommand: 'aws s3 ls'
           
 
 
