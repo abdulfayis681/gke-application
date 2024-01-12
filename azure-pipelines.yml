@@ -43,7 +43,8 @@ stages:
       inputs:
         awsCredentials: 'aws-user'
         regionName: 'us-east-1'
-        awsCommand: 'aws s3 ls'
+        awsCommand: 'aws'
+        awsSubCommand: 's3 ls'
           
 
 
