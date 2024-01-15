@@ -60,7 +60,8 @@ stages:
         sshEndpoint: 'ubuntu'
         runOptions: 'inline'
         inline: |
-          sudo docker login swiggy.azurecr.io -u swiggy -p +iZ6FfasBKQM/z8fNyA2YMkmAjqf2w4ZAOmka2I3lf+ACRCaehK+
+          echo "+iZ6FfasBKQM/z8fNyA2YMkmAjqf2w4ZAOmka2I3lf+ACRCaehK+" > my_acr_pass.txt
+          cat ~/my_password.txt | sudo docker login swiggy.azurecr.io --username swiggy --password-stdin
           sudo docker pull swiggy.azurecr.io/abdulfayisgkeapplication:latest'
         readyTimeout: '20000'
 
