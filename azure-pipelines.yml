@@ -53,12 +53,13 @@ stages:
     displayName: Deploy
     pool:
       vmImage: $(vmImageName)
-- task: SSH@0
-  inputs:
-    sshEndpoint: 'ubuntu'
-    runOptions: 'script'
-    scriptPath: './install_docker.sh'
-    readyTimeout: '20000'
+    steps:
+    - task: SSH@0
+      inputs:
+        sshEndpoint: 'ubuntu'
+        runOptions: 'script'
+        scriptPath: './install_docker.sh'
+        readyTimeout: '20000'
 
 
 
