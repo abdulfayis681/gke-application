@@ -64,6 +64,8 @@ stages:
           cat ./my_acr_pass.txt | sudo docker login swiggy.azurecr.io --username swiggy --password-stdin
           
           sudo docker pull swiggy.azurecr.io/abdulfayisgkeapplication:$(tag)
+          sudo docker images
+          sudo docker run -dit --name swiggy -p 8083:8080 ${IMAGE}:$(tag)
         readyTimeout: '20000'
 
 
