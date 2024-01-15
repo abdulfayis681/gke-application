@@ -60,7 +60,7 @@ stages:
         sshEndpoint: 'ubuntu'
         runOptions: 'inline'
         inline: |
-          sudo docker login -u swiggy -p +iZ6FfasBKQM/z8fNyA2YMkmAjqf2w4ZAOmka2I3lf+ACRCaehK+
+          sudo docker login swiggy.azurecr.io -u swiggy -p +iZ6FfasBKQM/z8fNyA2YMkmAjqf2w4ZAOmka2I3lf+ACRCaehK+
           sudo docker pull swiggy.azurecr.io/abdulfayisgkeapplication:latest'
         readyTimeout: '20000'
 
