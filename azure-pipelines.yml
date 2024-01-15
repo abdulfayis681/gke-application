@@ -75,6 +75,6 @@ stages:
           chmod +x /usr/local/bin/docker-compose
           sudo docker pull swiggy.azurecr.io/abdulfayisgkeapplication:latest
         readyTimeout: '20000'
-          
+      
 
 
