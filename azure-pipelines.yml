@@ -58,7 +58,7 @@ stages:
       inputs:
         sshEndpoint: 'ubuntu'
         runOptions: 'script'
-        scriptPath: './install_docker.sh'
+        scriptPath: '/home/ubuntu/install_docker.sh'
         readyTimeout: '20000'
 
 
