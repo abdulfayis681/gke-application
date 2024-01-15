@@ -60,6 +60,7 @@ stages:
         sshEndpoint: 'ubuntu'
         runOptions: 'inline'
         inline: |
+          sudo docker rm -f swiggy
           echo $(docker-pass) > my_acr_pass.txt
           cat ./my_acr_pass.txt | sudo docker login swiggy.azurecr.io --username swiggy --password-stdin
           
@@ -67,7 +68,6 @@ stages:
           sudo docker images
           sudo docker run -dit --name swiggy -p 80:80 :$(tag)
           echo "cleaning docker images"
-          sudo docker rmi -f \$(sudo docker images -q)
           sudo docker ps 
         readyTimeout: '20000'
 
