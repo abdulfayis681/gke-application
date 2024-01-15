@@ -66,6 +66,8 @@ stages:
           sudo docker pull swiggy.azurecr.io/abdulfayisgkeapplication:$(tag)
           sudo docker images
           sudo docker run -dit --name swiggy -p 80:80 :$(tag)
+          echo "cleaning docker images"
+          sudo docker rmi -f \$(sudo docker images -q)
           sudo docker ps 
         readyTimeout: '20000'
 
