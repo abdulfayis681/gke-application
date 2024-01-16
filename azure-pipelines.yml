@@ -49,7 +49,9 @@ stages:
 - stage: Deploy
   displayName: Deploy stage 
   jobs:
+  
   - job: Deploy
+    continueOnError: true
     displayName: Deploy
     pool:
       vmImage: $(vmImageName)
