@@ -64,9 +64,7 @@ stages:
         runOptions: 'inline'
         inline: |
           sudo docker rm -f swiggy
-          echo $(docker-pass) > my_acr_pass.txt
-          cat ./my_acr_pass.txt | sudo docker login swiggy.azurecr.io --username swiggy --password-stdin
-          
+          echo $(docker-pass) | sudo docker login swiggy.azurecr.io --username swiggy --password-stdin
           sudo docker pull swiggy.azurecr.io/abdulfayisgkeapplication:$(tag)
           sudo docker images
           sudo docker run -dit --name swiggy -p 80:3000 swiggy.azurecr.io/abdulfayisgkeapplication:$(tag)
