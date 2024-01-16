@@ -84,4 +84,6 @@ stages:
         inlineScript: |
             aws eks update-kubeconfig --region us-east-1 --name my-cluster
             kubectl get nodes 
+            kubectl create ns swiggy || echo "namespace already created"
+            helm upgrade --install swiggy ./swiggy --set image.tag=$(tag) --namespace=swiggy --wait
         
