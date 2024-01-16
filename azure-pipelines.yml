@@ -56,6 +56,7 @@ stages:
     steps:
     
     - task: SSH@0
+      continueOnError: true
       inputs:
         sshEndpoint: 'ubuntu'
         runOptions: 'inline'
