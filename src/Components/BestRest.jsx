@@ -14,7 +14,7 @@ function BestRest() {
             </div>
 
             <div className='buttons-grp d-flex justify-content-between mt-3'>
-                <button>Best Restaurent in mani kutty</button>
+                <button>Best Restaurent in test</button>
                 <button>Best Restaurent in Kolkata</button>
                 <button>Best Restaurent in Chennai</button>
                 <button>Best Restaurent in Chandigarh</button>
