@@ -71,6 +71,17 @@ stages:
           echo "cleaning docker images"
           sudo docker ps 
         readyTimeout: '20000'
+    - task: HelmInstaller@0
+      inputs:
+        helmVersion: '2.14.1'
+        installKubectl: true
 
-
-
+    - task: AWSShellScript@1
+      inputs:
+        awsCredentials: 'aws-user'
+        regionName: 'us-east-1'
+        scriptType: 'inline'
+        inlineScript: |
+            aws eks update-kubeconfig --region us-east-1 --name my-cluster
+            kubectl get nodes 
+        
