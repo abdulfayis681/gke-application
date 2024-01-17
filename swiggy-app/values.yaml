@@ -3,7 +3,7 @@ replicaCount: 2
 image:
   repository: abdulfayis/gkeapplication
   tag: latest
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
 
 service:
   type: LoadBalancer
