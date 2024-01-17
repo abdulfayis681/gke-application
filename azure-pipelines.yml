@@ -78,6 +78,10 @@ stages:
     - task: DockerInstaller@0
       inputs:
         dockerVersion: '17.09.0-ce'
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'swiggy'
+        command: 'login'
 
     - task: AWSShellScript@1
       inputs:
@@ -90,8 +94,9 @@ stages:
             ls
             kubectl delete -f deployment.yaml
             echo $(docker-pass) | sudo docker login swiggy.azurecr.io --username swiggy --password-stdin
-            sudo docker pull swiggy.azurecr.io/abdulfayisgkeapplication:$(tag)
+            sudo docker pull $(acr-repo):$(tag)
             kubectl create ns swiggy || echo "namespace already created"
             ls
-            helm upgrade --install swiggy swiggy-app/ --set image.repository=--set image.tag=$(tag) --namespace=swiggy --wait
+            helm upgrade --install swiggy swiggy-app/ --set image.repository=$(acr-repo) --set image.tag=$(tag) --namespace=swiggy --wait
+
         
