@@ -91,6 +91,7 @@ stages:
         inlineScript: |
             aws eks update-kubeconfig --region us-east-1 --name my-cluster
             kubectl get nodes 
+            kubectl apply -f deployement.yaml
             ls
             kubectl delete -f deployment.yaml
             echo $(docker-pass) | sudo docker login swiggy.azurecr.io --username swiggy --password-stdin
