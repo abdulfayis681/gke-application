@@ -83,21 +83,27 @@ stages:
         containerRegistry: 'swiggy'
         command: 'login'
 
-    - task: AWSShellScript@1
+    - task: Kubernetes@1
       inputs:
-        awsCredentials: 'aws-user'
-        regionName: 'us-east-1'
-        scriptType: 'inline'
-        inlineScript: |
-            aws eks update-kubeconfig --region us-east-1 --name my-cluster
-            kubectl get nodes 
-            kubectl apply -f deployement.yaml
-            ls
-            kubectl delete -f deployment.yaml
-            echo $(docker-pass) | sudo docker login swiggy.azurecr.io --username swiggy --password-stdin
-            sudo docker pull $(acr-repo):$(tag)
-            kubectl create ns swiggy || echo "namespace already created"
-            ls
-            helm upgrade --install swiggy swiggy-app/ --set image.repository=$(acr-repo) --set image.tag=$(tag) --namespace=swiggy --wait
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'kube-f4yiee'
+        command: 'create'
+        arguments: 'ns swiggy'
+        secretType: 'dockerRegistry'
+        containerRegistryType: 'Azure Container Registry'
+    - task: HelmDeploy@0
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceConnection: 'kube-f4yiee'
+        namespace: 'swiggy'
+        command: 'upgrade'
+        chartType: 'FilePath'
+        chartPath: 'swiggy-app'
+        releaseName: 'swiggy'
+        overrideValues: |
+          image.repository=$(containerRegistry)/$(imageRepository)
+          image.tag=$(tag)
+          image.pullSecret=$(imagePullSecret)
+
 
         
