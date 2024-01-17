@@ -40,12 +40,12 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
-    - task: AWSCLI@1
-      inputs:
-        awsCredentials: 'aws-user'
-        regionName: 'us-east-1'
-        awsCommand: 's3'
-        awsSubCommand: 'ls'
+    # - task: AWSCLI@1
+    #   inputs:
+    #     awsCredentials: 'aws-user'
+    #     regionName: 'us-east-1'
+    #     awsCommand: 's3'
+    #     awsSubCommand: 'ls'
 - stage: Deploy
   displayName: Deploy stage 
   jobs:
@@ -57,20 +57,20 @@ stages:
       vmImage: $(vmImageName)
     steps:
     
-    - task: SSH@0
-      continueOnError: true
-      inputs:
-        sshEndpoint: 'ubuntu'
-        runOptions: 'inline'
-        inline: |
-          sudo docker rm -f swiggy
-          echo $(docker-pass) | sudo docker login swiggy.azurecr.io --username swiggy --password-stdin
-          sudo docker pull swiggy.azurecr.io/abdulfayisgkeapplication:$(tag)
-          sudo docker images
-          sudo docker run -dit --name swiggy -p 80:3000 swiggy.azurecr.io/abdulfayisgkeapplication:$(tag)
-          echo "cleaning docker images"
-          sudo docker ps 
-        readyTimeout: '20000'
+    # - task: SSH@0
+    #   continueOnError: true
+    #   inputs:
+    #     sshEndpoint: 'ubuntu'
+    #     runOptions: 'inline'
+    #     inline: |
+    #       sudo docker rm -f swiggy
+    #       echo $(docker-pass) | sudo docker login swiggy.azurecr.io --username swiggy --password-stdin
+    #       sudo docker pull swiggy.azurecr.io/abdulfayisgkeapplication:$(tag)
+    #       sudo docker images
+    #       sudo docker run -dit --name swiggy -p 80:3000 swiggy.azurecr.io/abdulfayisgkeapplication:$(tag)
+    #       echo "cleaning docker images"
+    #       sudo docker ps 
+    #     readyTimeout: '20000'
     - task: HelmInstaller@0
       inputs:
         helmVersion: '2.14.1'
@@ -84,7 +84,10 @@ stages:
         inlineScript: |
             aws eks update-kubeconfig --region us-east-1 --name my-cluster
             kubectl get nodes 
-            kubectl create ns swiggy || echo "namespace already created"
             ls
-            helm upgrade --install swiggy swiggy-app/ --set image.tag=$(tag) --namespace=swiggy --wait
+            cd kubernetes
+            kubectl apply -f .
+            # kubectl create ns swiggy || echo "namespace already created"
+            # ls
+            # helm upgrade --install swiggy swiggy-app/ --set image.tag=$(tag) --namespace=swiggy --wait
         
