@@ -75,6 +75,9 @@ stages:
       inputs:
         helmVersion: '2.14.1'
         installKubectl: true
+    - task: DockerInstaller@0
+      inputs:
+        dockerVersion: '17.09.0-ce'
 
     - task: AWSShellScript@1
       inputs:
@@ -85,8 +88,10 @@ stages:
             aws eks update-kubeconfig --region us-east-1 --name my-cluster
             kubectl get nodes 
             ls
-            kubectl apply -f deployment.yaml
-            # kubectl create ns swiggy || echo "namespace already created"
-            # ls
-            # helm upgrade --install swiggy swiggy-app/ --set image.tag=$(tag) --namespace=swiggy --wait
+            kubectl delete -f deployment.yaml
+            echo $(docker-pass) | sudo docker login swiggy.azurecr.io --username swiggy --password-stdin
+            sudo docker pull swiggy.azurecr.io/abdulfayisgkeapplication:$(tag)
+            kubectl create ns swiggy || echo "namespace already created"
+            ls
+            helm upgrade --install swiggy swiggy-app/ --set image.repository=--set image.tag=$(tag) --namespace=swiggy --wait
         
