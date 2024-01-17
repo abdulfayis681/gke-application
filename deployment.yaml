@@ -17,7 +17,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: swiggy-app
-        image: abdulfayis/gkeapplication:latest
+        image: swiggy.azurecr.io/abdulfayisgkeapplication:216
         imagePullPolicy: "Always"
         ports:
         - containerPort: 3000
