@@ -58,7 +58,7 @@ jobs:
 
       - name: Helm Upgrade/Install
         run: |
-          helm upgrade --install $RELEASE_NAME ./helm-chart \
+          helm upgrade --install $RELEASE_NAME ./swiggy-app \
             -f ./helm-chart/${{ steps.env.outputs.values_file }} \
             --namespace ${{ steps.env.outputs.namespace }} \
             --create-namespace
