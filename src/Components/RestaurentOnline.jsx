@@ -5,7 +5,7 @@ function RestaurentOnline() {
     return (
         <div className='d-flex justify-content-center align-items-center mt-5'>
             <div className='w-75'>
-                <h4 className='fw-bold'>Restaurants with online food delivery in Kochi</h4>
+                <h4 className='fw-bold'>Restaurants with online food delivery in Kochi    staginggggggggg </h4>
                 <div style={{ gap: "1" }} className='buttonsoffiltering'>
                     <button>filter<i class="fa-solid fa-gears"></i></button>
                     <button>Sort by<i class="fa-solid fa-angle-down"></i></button>
