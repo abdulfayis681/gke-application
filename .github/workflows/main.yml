@@ -13,9 +13,9 @@ env:
 
 jobs:
 
-  # ----------------------------------------------------
-  # 🔧 Job 1: Setup & Build Docker Image
-  # ----------------------------------------------------
+
+  # Job 1: Setup & Build Docker Image
+
   build:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
@@ -83,17 +83,17 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: ⚙️ Setup kubectl
+      - name: Setup kubectl
         uses: azure/setup-kubectl@v3
         with:
           version: 'v1.27.1'
 
-      - name: 🛠️ Setup Helm
+      - name:  Setup Helm
         uses: azure/setup-helm@v3
         with:
           version: v3.13.3
 
-      - name: 🔗 Update kubeconfig for EKS
+      - name: Update kubeconfig for EKS
         run: |
           aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
 
