@@ -1,4 +1,4 @@
-name: CI/CD with Helm
+name: CI/CD with Env-based ECR and Helm
 
 on:
   push:
@@ -40,25 +40,42 @@ jobs:
         run: |
           aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
 
-      - name: Set environment variables
+      - name: Set environment-specific values
         id: env
         run: |
           if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
             echo "namespace=production" >> $GITHUB_OUTPUT
             echo "values_file=values.production.yaml" >> $GITHUB_OUTPUT
+            echo "ecr_repo=swiggy-prod" >> $GITHUB_OUTPUT
+            echo "tag=prod-${{ github.sha }}" >> $GITHUB_OUTPUT
           elif [[ "${{ github.ref }}" == "refs/heads/staging" ]]; then
             echo "namespace=staging" >> $GITHUB_OUTPUT
             echo "values_file=values.staging.yaml" >> $GITHUB_OUTPUT
+            echo "ecr_repo=swiggy-staging" >> $GITHUB_OUTPUT
+            echo "tag=staging-${{ github.sha }}" >> $GITHUB_OUTPUT
           fi
 
-      - name: Create namespace (if not exists)
+      - name: Login to Amazon ECR
+        run: |
+          aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin \
+          ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com
+
+      - name: Build and Push Docker Image to ECR
+        run: |
+          IMAGE="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com/${{ steps.env.outputs.ecr_repo }}:${{ steps.env.outputs.tag }}"
+          docker build -t $IMAGE ./swiggy-app
+          docker push $IMAGE
+
+      - name: Create namespace if not exists
         run: |
           kubectl get namespace ${{ steps.env.outputs.namespace }} || \
           kubectl create namespace ${{ steps.env.outputs.namespace }}
 
-      - name: Helm Upgrade/Install
+      - name: Deploy with Helm
         run: |
           helm upgrade --install $RELEASE_NAME ./swiggy-app \
             -f ./swiggy-app/${{ steps.env.outputs.values_file }} \
+            --set image.repository="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com/${{ steps.env.outputs.ecr_repo }}" \
+            --set image.tag=${{ steps.env.outputs.tag }} \
             --namespace ${{ steps.env.outputs.namespace }} \
             --create-namespace
