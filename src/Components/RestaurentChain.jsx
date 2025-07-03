@@ -5,7 +5,7 @@ function RestaurentChain() {
     return (
         <div className='d-flex justify-content-center align-items-center mt-5'>
             <div className='w-75'>
-                <h4 className='fw-bolder'>Top restaurant chains in Kochi</h4>
+                <h4 className='fw-bolder'>Top restaurant chains in Kochi devvvvvvvvvvvvvvvv</h4>
                 <div style={{gap:"50px",overflowY:"scroll"}} className='d-flex  align-items-center'>
                     <div className='Hotel-card'>
                         <div style={{
