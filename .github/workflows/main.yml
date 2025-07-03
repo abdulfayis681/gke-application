@@ -63,7 +63,7 @@ jobs:
       - name: Build and Push Docker Image to ECR
         run: |
           IMAGE="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com/${{ steps.env.outputs.ecr_repo }}:${{ steps.env.outputs.tag }}"
-          docker build -t $IMAGE ./swiggy-app
+          docker build -t $IMAGE .
           docker push $IMAGE
 
       - name: Create namespace if not exists
